@@ -234,30 +234,42 @@ export const Progress = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {records.slice(-10).reverse().map((record, index) => {
+              {records.slice(-10).reverse().map((record, displayIndex) => {
+                // Calculate the actual index in the original array
+                const actualIndex = records.length - 1 - displayIndex;
                 const date = new Date(record.date);
                 const dateStr = date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
                 const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
                 
                 return (
-                  <div key={index} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted transition-all">
-                    <div className="flex items-center gap-3">
-                      <div className={`${record.type === 'business' ? 'bg-primary' : 'bg-foreground'} text-white w-12 h-12 rounded-lg flex items-center justify-center`}>
+                  <div key={displayIndex} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted transition-all group">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`${record.type === 'business' ? 'bg-primary' : 'bg-foreground'} text-white w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0`}>
                         {record.type === 'business' ? (
                           <Building2 className="w-6 h-6" />
                         ) : (
                           <User className="w-6 h-6" />
                         )}
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <p className="font-semibold text-foreground">{record.type === 'business' ? 'Negocio' : 'Personal'}</p>
                         <p className="text-xs text-muted-foreground">{dateStr} • {timeStr}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-foreground number-display">{formatCurrency(record.amount)}</p>
-                      {record.debts > 0 && <p className="text-xs text-orange-600">Deuda: {formatCurrency(record.debts)}</p>}
-                      {record.savings > 0 && <p className="text-xs text-green-600">Ahorro: {formatCurrency(record.savings)}</p>}
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <p className="font-bold text-foreground number-display">{formatCurrency(record.amount)}</p>
+                        {record.debts > 0 && <p className="text-xs text-orange-600">Deuda: {formatCurrency(record.debts)}</p>}
+                        {record.savings > 0 && <p className="text-xs text-green-600">Ahorro: {formatCurrency(record.savings)}</p>}
+                      </div>
+                      <Button
+                        onClick={() => handleDeleteRecord(actualIndex)}
+                        variant="ghost"
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
                 );
