@@ -55,7 +55,18 @@ export const Progress = () => {
     if (window.confirm('¿Estás seguro de que quieres borrar todos los datos? Esta acción no se puede deshacer.')) {
       localStorage.removeItem('financialRecords');
       loadData();
-      toast.success('Datos borrados exitosamente');
+      toast.success('Todos los datos han sido borrados');
+    }
+  };
+
+  const handleDeleteRecord = (index) => {
+    if (window.confirm('¿Deseas eliminar este registro?')) {
+      const data = JSON.parse(localStorage.getItem('financialRecords') || '[]');
+      const deletedRecord = data[index];
+      data.splice(index, 1);
+      localStorage.setItem('financialRecords', JSON.stringify(data));
+      loadData();
+      toast.success('Registro eliminado correctamente');
     }
   };
 
