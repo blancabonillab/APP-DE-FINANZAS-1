@@ -723,7 +723,19 @@
                     chart.destroy();
                     chart = null;
                 }
-                alert('Datos borrados exitosamente');
+                alert('Todos los datos han sido borrados');
+            }
+        }
+
+        // Delete Single Record
+        function deleteRecord(index) {
+            if (confirm('¿Deseas eliminar este registro?')) {
+                const records = getRecords();
+                records.splice(index, 1);
+                localStorage.setItem('financialRecords', JSON.stringify(records));
+                loadProgressData();
+                renderChart();
+                showSuccessMessage('Registro eliminado correctamente');
             }
         }
 
