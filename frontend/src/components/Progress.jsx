@@ -394,6 +394,48 @@ export const Progress = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Backup Section */}
+      <Card className="card-elegant">
+        <CardHeader>
+          <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Respaldo de Datos
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Exporta tus datos para hacer respaldo o transferirlos a otro dispositivo
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={handleExportCSV}
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              disabled={records.length === 0}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar a Excel (CSV)
+            </Button>
+            <Button
+              onClick={handleImportCSV}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Importar Respaldo
+            </Button>
+          </div>
+
+          <Alert className="border-blue-200 bg-blue-50/50">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-sm text-blue-900">
+              <strong>💡 Consejo:</strong> Exporta tus datos regularmente para no perderlos si borras el caché del navegador.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
     </div>
   );
 };
