@@ -768,6 +768,126 @@
             }, 3000);
         }
 
+        // Export to CSV
+        function exportToCSV() {
+            const records = getRecords();
+            
+            if (records.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+            
+            // CSV Header
+            let csv = 'Fecha,Hora,Tipo,Monto Total,Transferencia Personal,Deudas,Ahorros\n';
+            
+            // Add records
+            records.forEach(record => {
+                const date = new Date(record.date);
+                const dateStr = date.toLocaleDateString('es-ES');
+                const timeStr = date.toLocaleTimeString('es-ES');
+                const tipo = record.type === 'business' ? 'Negocio' : 'Personal';
+                
+                csv += `${dateStr},${timeStr},${tipo},${record.amount},${record.personalTransfer || 0},${record.debts || 0},${record.savings || 0}\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'mis_finanzas_backup.csv');
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showSuccessMessage('✅ Datos exportados correctamente');
+        }
+
+        // Import from CSV
+        function importFromCSV() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const csv = event.target.result;
+                        const lines = csv.split('\n');
+                        
+                        // Skip header
+                        const dataLines = lines.slice(1).filter(line => line.trim());
+                        
+                        if (dataLines.length === 0) {
+                            alert('El archivo CSV está vacío');
+                            return;
+                        }
+                        
+                        const newRecords = [];
+                        
+                        dataLines.forEach(line => {
+                            const parts = line.split(',');
+                            if (parts.length >= 7) {
+                                const [dateStr, timeStr, tipo, amount, personalTransfer, debts, savings] = parts;
+                                
+                                // Parse date
+                                const [day, month, year] = dateStr.trim().split('/');
+                                const [hours, minutes, seconds] = timeStr.trim().split(':');
+                                const date = new Date(year, month - 1, day, hours, minutes, seconds || 0);
+                                
+                                newRecords.push({
+                                    date: date.toISOString(),
+                                    type: tipo.trim() === 'Negocio' ? 'business' : 'personal',
+                                    amount: parseFloat(amount),
+                                    personalTransfer: parseFloat(personalTransfer) || 0,
+                                    debts: parseFloat(debts) || 0,
+                                    savings: parseFloat(savings) || 0
+                                });
+                            }
+                        });
+                        
+                        if (newRecords.length > 0) {
+                            // Ask if they want to replace or merge
+                            const replace = confirm(
+                                `Se encontraron ${newRecords.length} registros.\n\n` +
+                                `¿Deseas REEMPLAZAR todos tus datos actuales?\n\n` +
+                                `- OK = Reemplazar todo\n` +
+                                `- Cancelar = Agregar a los datos existentes`
+                            );
+                            
+                            if (replace) {
+                                localStorage.setItem('financialRecords', JSON.stringify(newRecords));
+                            } else {
+                                const existingRecords = getRecords();
+                                const mergedRecords = [...existingRecords, ...newRecords];
+                                localStorage.setItem('financialRecords', JSON.stringify(mergedRecords));
+                            }
+                            
+                            loadProgressData();
+                            renderChart();
+                            showSuccessMessage(`✅ ${newRecords.length} registros importados correctamente`);
+                        } else {
+                            alert('No se pudieron leer los datos del archivo');
+                        }
+                    } catch (error) {
+                        console.error('Error importando CSV:', error);
+                        alert('Error al importar el archivo. Verifica que sea un CSV válido.');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
         // Format Currency
         function formatCurrency(value) {
             return new Intl.NumberFormat('es-EC', {
