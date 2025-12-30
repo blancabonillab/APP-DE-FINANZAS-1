@@ -748,19 +748,19 @@
         }
 
         // Show Success Message
-        function showSuccessMessage() {
-            const message = document.createElement('div');
-            message.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 z-50 slide-enter';
-            message.innerHTML = `
+        function showSuccessMessage(message = '¡Registro guardado exitosamente!') {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 z-50 slide-enter';
+            messageEl.innerHTML = `
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span class="font-semibold">¡Registro guardado exitosamente!</span>
+                <span class="font-semibold">${message}</span>
             `;
-            document.body.appendChild(message);
+            document.body.appendChild(messageEl);
             
             setTimeout(() => {
-                message.remove();
+                messageEl.remove();
             }, 3000);
         }
 
