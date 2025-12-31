@@ -630,13 +630,23 @@
         // Save Business Record
         function saveBusinessRecord(amount) {
             const records = getRecords();
+            const personalTransfer = amount * 0.30;
+            
+            // Calcular valores para el 30%
+            const taxes = personalTransfer * 0.15;
+            const netReal = personalTransfer - taxes;
+            const maser = netReal * 0.10;
+            const remainder = netReal - maser;
+            const debts = remainder * 0.30;
+            const investment = remainder * 0.10;
+            
             const record = {
                 date: new Date().toISOString(),
                 type: 'business',
                 amount: amount,
-                personalTransfer: amount * 0.30,
-                debts: 0,
-                savings: 0
+                personalTransfer: personalTransfer,
+                debts: debts,
+                savings: investment
             };
             records.push(record);
             localStorage.setItem('financialRecords', JSON.stringify(records));
