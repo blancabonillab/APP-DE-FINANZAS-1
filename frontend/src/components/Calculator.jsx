@@ -19,10 +19,26 @@ export const Calculator = ({ onDataSaved }) => {
     const reinvestment = total * 0.70;
     const personalTransfer = total * 0.30;
     
+    // Aplicar cálculo personal sobre el 30%
+    const taxes = personalTransfer * 0.15;
+    const netReal = personalTransfer - taxes;
+    const maser = netReal * 0.10;
+    const remainder = netReal - maser;
+    const house = remainder * 0.60;
+    const debts = remainder * 0.30;
+    const investment = remainder * 0.10;
+    
     return {
       total,
       reinvestment,
-      personalTransfer
+      personalTransfer,
+      taxes,
+      netReal,
+      maser,
+      remainder,
+      house,
+      debts,
+      investment
     };
   };
 
