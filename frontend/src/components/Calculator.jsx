@@ -88,8 +88,8 @@ export const Calculator = ({ onDataSaved }) => {
         type: 'business',
         amount: numericAmount,
         personalTransfer: result.personalTransfer,
-        debts: 0,
-        savings: 0
+        debts: result.debts,
+        savings: result.investment
       });
     } else {
       const result = calculatePersonal(numericAmount);
