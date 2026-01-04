@@ -757,8 +757,9 @@
             document.getElementById('total-debt').textContent = formatCurrency(totalDebt);
             document.getElementById('total-savings').textContent = formatCurrency(totalSavings);
             
-            // Render history
+            // Render history and Mi Siembra
             renderHistory(records);
+            renderMiSiembra(totalSavings);
         }
 
         // Render History
