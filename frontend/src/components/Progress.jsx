@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Trash2, CreditCard, DollarSign, Building2, User, Download, Upload, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
+import MiSiembra from '@/components/MiSiembra';
 
 export const Progress = () => {
   const [records, setRecords] = useState([]);
