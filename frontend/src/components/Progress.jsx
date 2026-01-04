@@ -165,88 +165,11 @@ export const Progress = () => {
     }).format(value);
   };
 
-  // Prepare chart data
-  const getChartData = () => {
-    if (records.length === 0) {
-      return {
-        labels: [],
-        datasets: []
-      };
-    }
-
-    // Aggregate by date
-    const dataByDate = {};
-    records.forEach(record => {
-      const date = new Date(record.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-      if (!dataByDate[date]) {
-        dataByDate[date] = { debts: 0, savings: 0 };
-      }
-      dataByDate[date].debts += record.debts || 0;
-      dataByDate[date].savings += record.savings || 0;
-    });
-
-    const labels = Object.keys(dataByDate);
-    const debtsData = labels.map(date => dataByDate[date].debts);
-    const savingsData = labels.map(date => dataByDate[date].savings);
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: 'Ataque a Deudas',
-          data: debtsData,
-          borderColor: 'rgb(249, 115, 22)',
-          backgroundColor: 'rgba(249, 115, 22, 0.1)',
-          borderWidth: 3,
-          tension: 0.3,
-          fill: true
-        },
-        {
-          label: 'Semilla/Inversión',
-          data: savingsData,
-          borderColor: 'rgb(34, 197, 94)',
-          backgroundColor: 'rgba(34, 197, 94, 0.1)',
-          borderWidth: 3,
-          tension: 0.3,
-          fill: true
-        }
-      ]
-    };
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          padding: 20,
-          font: {
-            size: 12,
-            weight: 'bold'
-          }
-        }
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        callbacks: {
-          label: function(context) {
-            return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
-          }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: function(value) {
-            return '$' + value.toLocaleString('es-EC');
-          }
-        }
-      }
+  const handleClearData = () => {
+    if (window.confirm('¿Estás seguro de que quieres borrar todos los datos? Esta acción no se puede deshacer.')) {
+      localStorage.removeItem('financialRecords');
+      loadData();
+      toast.success('Todos los datos han sido borrados');
     }
   };
 
