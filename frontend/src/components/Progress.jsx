@@ -277,19 +277,8 @@ export const Progress = () => {
         </Card>
       </div>
 
-      {/* Chart */}
-      {records.length > 0 && (
-        <Card className="card-elegant">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold">Evolución Financiera</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="relative h-64">
-              <Line data={getChartData()} options={chartOptions} />
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Mi Siembra - Nueva sección orgánica */}
+      <MiSiembra totalSavings={totalSavings} />
 
       {/* History */}
       <Card className="card-elegant">
