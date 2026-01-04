@@ -324,7 +324,6 @@
         // Global State
         let currentMode = 'business';
         let currentTab = 'calculator';
-        let chart = null;
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -349,7 +348,6 @@
             
             if (tab === 'progress') {
                 loadProgressData();
-                renderChart();
             }
         }
 
